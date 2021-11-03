@@ -21,15 +21,13 @@
                 <div id="checkId"></div>
             </div>
             <label>비밀번호<label>
-            <article class="join_input"><input type="password" id="password" name="password" placeholder="비밀번호 입력"></article>
+            <article class="join_input"><input type="password" id="pwd" name="pwd" placeholder="비밀번호 입력"></article>
             <label>비밀번호 확인</label>
-            <article class="join_input"><input type="password" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호 확인" onkeyup="pwdCheck()"></article>
+            <article class="join_input"><input type="password" id="pwdConfirm" name="pwdConfirm" placeholder="비밀번호 확인" onkeyup="pwdCheck()"></article>
             <div id="checkPwd"></div>
-            <br/>
-            
+            <br/>           
             <button type="button" class="btn btn-primary" id="btn_join">회원가입</button>
             <button type="button" class="go_back"><a href="javascript:history.back(-1)">뒤로</a></button>
-
     </form>
 </section>
 
@@ -70,8 +68,8 @@
 
     function pwdCheck() {
         var f1 = document.forms[0];
-        var pwd1 = f1.password.value;
-        var pwd2 = f1.passwordConfirm.value;
+        var pwd1 = f1.pwd.value;
+        var pwd2 = f1.pwdConfirm.value;
         if (pwd1 != pwd2) {
             document.getElementById('checkPwd').style.color="red";
             document.getElementById('checkPwd').innerHTML = "동일한 암호를 입력해 주세요.";
@@ -85,8 +83,8 @@
         $('#btn_join').click(function () {
             var id = $('#id').val();
             var duplicateCheck = $('#duplicate_check').attr('check');
-            var pwd = $('#password').val();
-            var pwdConfirm = $('#passwordConfirm').val();
+            var pwd = $('#pwd').val();
+            var pwdConfirm = $('#pwdConfirm').val();
 
 
             if (id == null || id == undefined || id == "") {
@@ -110,19 +108,11 @@
                 $('#passwordConfirm').focus();
                 return false;
             }
-            if (password != pwdConfirm) {
+            if (pwd != pwdConfirm) {
                 alert('입력한 비밀번호가 같지 않습니다.');
                 $('#passwordConfirm').focus();
                 return false;
             }
-
-            var data = {
-                id: username,
-                pwd: password,
-                pwdConfirm: pwdConfirm,
-				
-            };
-
 
             var form = $('#join')[0];
             var formData = new FormData(form);

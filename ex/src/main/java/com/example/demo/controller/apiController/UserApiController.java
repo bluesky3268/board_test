@@ -43,6 +43,7 @@ public class UserApiController {
 	
 	@PostMapping("/join")
 	public int join(UserJoin userJoin, Model model) {
+		log.info("join : {}, {}, {}",userJoin.getId(), userJoin.getPwd(), userJoin.getPwdConfirm());
 		int result = 0;
 		if(userJoin != null) { 
 			result = userService.join(userJoin);
