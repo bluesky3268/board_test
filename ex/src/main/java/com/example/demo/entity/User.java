@@ -15,19 +15,17 @@ public class User {
 	private Long no;
 	private String id;
 	private String pwd;
-	private String name;
 	private LocalDateTime regDate;
 	
 	@Builder
-	public User(String id, String pwd, String name, LocalDateTime regDate) {
+	public User(String id, String pwd, LocalDateTime regDate) {
 		this.id = id;
 		this.pwd = pwd;
-		this.name = name;
 		this.regDate = regDate;
 	}
 	
 	public UserResponse toDto() {
-		UserResponse response = new UserResponse(this.no, this.id, this.name);
+		UserResponse response = new UserResponse(this.no, this.id, this.regDate);
 		return response;
 	}
 }

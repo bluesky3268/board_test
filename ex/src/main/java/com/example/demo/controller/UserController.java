@@ -38,6 +38,22 @@ public class UserController {
 	 return "/user/loginForm";
 	}
 	
+
+	@PostMapping("/login")
+	public String login(Login login, HttpSession session) {
+		log.info("login id : {}", login.getId());
+		int result = userService.login(login);
+		// 성공 : 1, 실패 : 0
+		if(result == 1) {
+			session.setAttribute("id", login.getId());
+			log.info("로그인 성공");
+			return "index";
+		}
+		log.info("로그인 실패");
+
+		return "redirect:/loginForm";
+	}
+	
 	@ResponseBody
 	@GetMapping("/find/{no}")
 	public UserResponse findUser(@PathVariable Long no) {

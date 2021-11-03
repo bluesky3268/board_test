@@ -1,5 +1,7 @@
 package com.example.demo.dto.responseDto.user;
 
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +11,12 @@ public class UserResponse {
 
 	private Long no;
 	private String id;
-	private String name;
+	private LocalDateTime regDate;
 	
-	public UserResponse(Long no, String id, String name) {
+	public UserResponse(Long no, String id, LocalDateTime regDate) {
 		this.no = no;
 		this.id = id;
-		this.name = name;
+		this.regDate = regDate;
 	}
 	
 	

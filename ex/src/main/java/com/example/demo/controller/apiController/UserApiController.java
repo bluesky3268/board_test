@@ -4,13 +4,13 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.requestDto.Login;
 import com.example.demo.dto.requestDto.UserJoin;
 import com.example.demo.service.UserService;
 
@@ -41,20 +41,24 @@ public class UserApiController {
 	@PostMapping("/join")
 	public int join(UserJoin userJoin, Model model) {
 		int result = 0;
-		if(userJoin !=null) { 
+		if(userJoin != null) { 
 			result = userService.join(userJoin);
 			model.addAttribute("result", result);
 		} 
 	 return result;
 	}
 
-	@PostMapping("/login")
-	public int login(Login login, HttpSession session) {
-		int result = userService.login(login, session);
-		if(result == 1) {
-			session.setAttribute("id", login.getId());
+	@GetMapping("/logout")
+	public int logout(HttpSession session) {
+		if(session.getAttribute("id") != null) {
+			session.removeAttribute("id");
+			// 로그아웃 성공
+			log.info("로그아웃 성공");
+			return 1;
 		}
-		return result;
+		// 로그아웃 실패
+		log.info("로그아웃 실패");
+		return 0;
 	}
 	
 	@DeleteMapping("/user/{no}")

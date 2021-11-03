@@ -13,7 +13,7 @@ public interface UserService {
 	int join(UserJoin userJoin);
 	List<UserResponse> findAll();
 	UserResponse findByNo(Long no);
-	int login(Login login, HttpSession session);
+	int login(Login login);
 	boolean idDuplicateCheck(String id);
 	int delete(Long no);
 }

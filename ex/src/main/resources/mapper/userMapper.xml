@@ -20,7 +20,7 @@
 		select * from user where uno = #{no}
 	</select>
 	
-	<select id="findById" parameterType="String" resultMap="user">
+	<select id="findById" parameterType="java.lang.String" resultMap="user">
 		select * from user where uid = #{id}
 	</select>
 	
