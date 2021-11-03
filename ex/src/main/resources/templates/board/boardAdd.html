@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <title>게시글 작성</title>
+</head>
+<body>
+<header>게시글 등록</header>
+<section>
+  <form enctype="multipart/form-data" id="form">
+    <div class="container">
+      <div class="boardAdd">
+        <article for="writer">작성자</article>
+        <div id="writer" th:value="${session.user.id}" th:text="${session.user.id}" readonly style="color: dimgray"></div>
+        <input type="hidden" th:value="${session.user.no}" id="userNo"/>
+        </div>
+      </div>
+      <div class="add_input">
+      <article for="title">비밀번호</article>
+      <input type="text" id="pwd" name = "pwd">
+    </div>
+      <div class="add_input">
+        <article for="title">제목</article>
+        <input type="text" id="title" name = "title">
+      </div>
+      <div class="add_input">
+        <article for="content">내용</article>
+        <textarea type="text" id="content" name="content" cols="50" rows="20"></textarea>
+      </div>
+
+      <div class="form-group">
+        <article for="img">사진 업로드</article>
+        <div><input type="file" id="img" name="img" multiple="multiple"></div>
+      </div>
+      <div class="form-group">
+        <article for="img">파일 업로드</article>
+        <div><input type="file" id="file" name="file" multiple="multiple"></div>
+      </div>
+    </div>
+    <button type="button" class="join_btn" id="btn-add">등록</button>
+    <button type="button" class="go_back"><a href="javascript:history.back(-1)">취소</a></button>
+  </form>
+</section>
+<script type="text/javascript">
+  $(function() {
+
+    $('#btn-add').click(function () {
+      var writer = $('#writer').val();
+      var title = $('#title').val();
+      var content = $('#content').val();
+      var pwd = $('#pwd').val();
+      var userNo = $('#userNo').val();
+
+      var data = {
+        title: title,
+        content: content,
+        pwd: pwd,
+        userNo: userNo,
+        writer : writer
+      };
+
+      if (title == null || title == undefined || title == "") {
+        alert('제목을 입력해주세요');
+        $('#title').focus();
+        return false;
+      }
+
+
+      var form = $('#form')[0];
+      var formData = new FormData(form);
+
+      formData.append('img', $('#img'));
+      formData.append('file', $('#file'));
+      formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+      $.ajax({
+
+        type: 'POST',
+        url: '/api/v2/add',
+        processData: false,
+        contentType: false,
+        data: formData,
+
+        success: function (data) {
+          alert("성공적으로 등록되었습니다.");
+          if (data == 1) {
+            window.location.href = '/';
+          } else if (data == 0) {
+            window.location.href = '/board';
+          }
+        },
+        error: function (error) {
+          alert('게시글 등록에 실패하였습니다. 다시 시도해주세요.');
+        }
+      });
+
+    });
+  });
+</script>
+</body>
+</html>
