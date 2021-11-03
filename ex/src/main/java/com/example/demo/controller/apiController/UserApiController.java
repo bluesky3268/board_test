@@ -1,5 +1,7 @@
 package com.example.demo.controller.apiController;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.ui.Model;
@@ -27,9 +29,10 @@ public class UserApiController {
 	
 		
 	@PostMapping("/idDuplicateCheck")
-	public int idDuplicateCheck(@RequestBody String id) {
-		log.info("id param : {}", id);
-		boolean result = userService.idDuplicateCheck(id);
+	public int idDuplicateCheck(@RequestBody HashMap<String, Object> loginId) {
+		log.info("param id : {}", loginId);
+		String param = String.valueOf(loginId.get("id"));
+		boolean result = userService.idDuplicateCheck(param);
 		log.info("result : {}", result);
 		if(result == true) {
 			// 아이디 사용 가능
@@ -57,7 +60,7 @@ public class UserApiController {
 			return 1;
 		}
 		// 로그아웃 실패
-		log.info("로그아웃 실패");
+		log.info("로그아웃 실패, 로그인이 먼저 필요");
 		return 0;
 	}
 	

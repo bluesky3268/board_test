@@ -82,6 +82,7 @@ public class UserServiceImpl implements UserService{
 			User findUser = userRepository.findById(id);
 			log.info("-> service findUser.getId() : {}", findUser.getId());
 		}catch(NullPointerException e) {
+			log.info("NullPointerException 발생");
 			// null값이면 아이디 사용가능
 			return true;
 		}
