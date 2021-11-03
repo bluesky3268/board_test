@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+<style>
+    *{
+        text-align: center;
+    }
+    table {
+        text-align: center;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    #select_role {
+        text-align: right;
+        margin-right: 15px;
+        margin-bottom: 10px;
+    }
+
+</style>
+    <title>게시판</title>
+</head>
+<body>
+<div style="margin-top:10px">
+    <button type="button" class="btn btn-outline-primary"><a href="javascript:history.back(-1)">뒤로</a></button>
+    <button type="button" class="btn btn-outline-primary"><a th:href="@{/loginForm}">로그인</a></button>
+    <a th:href="@{/joinForm}" class="btn btn-primary">회원가입</a>
+</div>
+<br/>
+
+<h2>게시글</h2>
+<table class="table table-horizontal table-bordered">
+    <thead>
+    <tr class="table-light">
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>조회수</th>
+            <th>작성일자</th>
+        </tr>
+    </thead>
+    <tbody class="tbody" th:each="board : ${response}">
+        <td th:text="${board.no}">번호</td>
+        <td th:text="${board.title}" id="title">제목</td>
+        <td th:text="${board.writer}" id="writer">작성자</td>
+        <td th:text="${board.count}" id="count">조회수</td>
+        <td th:text="${board.createdDate}" id="createdDate">작성일자</td>
+    </tbody>
+</table>
+
+<!--
+	<nav aria-label="pagination">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${paging.}">
+            <a class="page-link" th:href="@{/admin/members(page=${members.getPageable().getPageNumber() -1})}" tabindex="-1" aria-disabled="true">이전</a>
+        </li>
+        <li class="page-item" th:classappend="${i == members.getPageable().getPageNumber() + 1} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}">
+            <a class="page-link" th:href="@{/admin/members(page=${i - 1})}" th:text="${i}">1</a>
+        </li>
+        <li class="page-item" th:classappend="${members.getPageable().getPageNumber() + 1 == members.getTotalPages()} ? 'disabled'">
+            <a class="page-link" th:href="@{/admin/members(page=${members.getPageable().getPageNumber() +1})}" >다음</a>
+        </li>
+    </ul>
+</nav>
+-->
+<script type="text/javascript">
+
+    let delete_member = {
+        delete: function (memberNo) {
+            $.ajax({
+                type: "DELETE",
+                url: `/api/member/` + memberNo,
+                dataType: "json"
+            }).done(function (response) {
+                alert('성공적으로 삭제되었습니다.');
+                window.location.href = '/admin/members';
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+    }
+
+    $(function (){
+       $('#btn_search_role').click(function (){
+           var role = $('#role').val();
+
+           $.ajax({
+               type:'GET',
+               url: '/api/member/role/' + role,
+               dataType:'json',
+               contentType:'application/json; charset=UTF-8',
+               success:  function () {
+                   window.location.href = '/admin/members/' + role;
+               }
+
+           });
+       });
+    });
+</script>
+</body>
+</html>

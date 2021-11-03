@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.repository.BoardRepository">
+
+	<resultMap id="board" type="com.example.demo.entity.Board">
+		<id column="bno" property="no"/>
+		<result column="uno" property="uno"/>
+		<result column="writer" property="writer"/>
+		<result column="bpwd" property="pwd"/>
+		<result column="title" property="title"/>
+		<result column="content" property="content"/>
+		<result column="count" property="count"/>
+		<result column="file_name" property="fileName"/>
+		<result column="cdate" property="createdDate"/>
+		<result column="mdate" property="modifiedDate"/>	
+	</resultMap>
+	
+<!-- 	<resultMap id="user" type="com.example.demo.entity.User">
+		<id column="uno" property="no"/>
+		<result column="uid" property="id"/>
+		<result column="upwd" property="pwd"/>
+		<result column="uname" property="name"/>
+		<result column="rdate" property="regDate"/>
+	</resultMap> -->
+	
+<!--  	<select id="findUserByNo" parameterType="java.lang.Long" resultMap="user">
+		select uno, uid, uname, rdate from user where uno=#{no}
+	</select>  -->
+
+
+	<select id="findByNo" parameterType="java.lang.Long" resultMap="board">
+		select * from board where bno=#{no}
+	</select>
+
+	<select id="findAll" resultMap="board">
+		select * from board order by cdate desc
+	</select>
+	
+	<insert id="insert" parameterType="com.example.demo.entity.Board">
+		insert into board (uno, bpwd, title, writer, content, count, file_name, cdate, mdate) 
+		values(#{uno}, #{pwd}, #{title}, #{writer}, #{content}, #{count}, #{fileName}, #{createdDate}, #{modifiedDate})
+	</insert>
+	
+	<update id="increaseCount" parameterType="java.lang.Long">
+		update board set count = count + 1 where bno = #{no}
+	</update>
+	
+	<select id="countBoard" resultType="int">
+		select count(*) from board
+	</select>
+	
+<!-- 	<select id="boardPaging" parameterType="int" resultMap="board">
+		select A.* from
+			(select rownum as rn, b.* from board b order by cdate desc) as A
+		limit #{dataNum} offset #{pageNum};
+	</select>
+-->
+	
+</mapper>
