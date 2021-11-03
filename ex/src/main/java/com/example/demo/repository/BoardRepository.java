@@ -12,13 +12,11 @@ import com.github.pagehelper.Page;
 public interface BoardRepository {
 
 	int insert(Board board);
-	
+
 	Board findByNo(Long no);
 	
 	List<Board> findAll();
-	
-//	List<Board> boardPaging(@Param("dataNum")int dataNum, @Param("pageNum") int pageNum);
-	
+
 	void increaseCount(Long bno);
 
 	int countBoard();

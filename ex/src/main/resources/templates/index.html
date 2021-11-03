@@ -49,22 +49,27 @@
         <td th:text="${board.createdDate}" id="createdDate">작성일자</td>
     </tbody>
 </table>
+<button type="button" class="btn btn-outline-primary"><a th:href="@{/board}">게시글 작성</a></button>
 
-<!--
-	<nav aria-label="pagination">
-    <ul class="pagination justify-content-center">
-        <li class="page-item" th:classappend="${paging.}">
-            <a class="page-link" th:href="@{/admin/members(page=${members.getPageable().getPageNumber() -1})}" tabindex="-1" aria-disabled="true">이전</a>
-        </li>
-        <li class="page-item" th:classappend="${i == members.getPageable().getPageNumber() + 1} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage, endPage)}">
-            <a class="page-link" th:href="@{/admin/members(page=${i - 1})}" th:text="${i}">1</a>
-        </li>
-        <li class="page-item" th:classappend="${members.getPageable().getPageNumber() + 1 == members.getTotalPages()} ? 'disabled'">
-            <a class="page-link" th:href="@{/admin/members(page=${members.getPageable().getPageNumber() +1})}" >다음</a>
-        </li>
-    </ul>
-</nav>
--->
+<!--<nav>-->
+<!--    <ul>-->
+<!--        &lt;!&ndash; 이전 페이지 &ndash;&gt;-->
+<!--        <li th:classappend="${board.getPrePage() == 0} ? 'disabled'">-->
+<!--            &lt;!&ndash; href: /page?pageNum=이전페이지&keyword=검색분류&search=검색어 &ndash;&gt;-->
+<!--            <a th:href="@{/page(pageNum=${users.getPrePage()}, keyword=${search.getKeyword()}, search=${search.getSearch()})}">Previous</a>-->
+<!--        </li>-->
+<!--        &lt;!&ndash; getNavigateFirstPage() : 페이징의 처음 숫자 getNavigateLastPage : 페이징의 마지막 숫자를 이용해 페이징 숫자 출력 &ndash;&gt;-->
+<!--        &lt;!&ndash; href : /page?pageNum=선택한 페이지&keyword=검색분류&search=검색어 &ndash;&gt;-->
+<!--        <li th:each="page: ${#numbers.sequence(users.getNavigateFirstPage(), users.getNavigateLastPage())}" th:classappend="${page == users.getPageNum()} ? 'active'">-->
+<!--            <a th:text="${page}" th:href="@{/page(pageNum=${page})}"></a>-->
+<!--        </li>-->
+<!--        &lt;!&ndash; getPrePage : 다음 페이지 &ndash;&gt;-->
+<!--        <li th:classappend="${users.getNextPage() == 0} ? 'disabled'">-->
+<!--            &lt;!&ndash; href: /page?pageNum=다음페이지&keyword=검색분류&search=검색어 &ndash;&gt;-->
+<!--            <a th:href="@{/page(pageNum=${users.getNextPage()}, keyword=${search.getKeyword()}, search=${search.getSearch()})}">Next</a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</nav>-->
 <script type="text/javascript">
 
     let delete_member = {

@@ -59,6 +59,13 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
+	public UserResponse findById(String id) {
+		User findUser = userRepository.findById(id);
+		UserResponse response = findUser.toDto();
+		return response;
+	}
+
+	@Override
 	public int login(Login login) {
 		log.info("login.getId() : {}", login.getId());
 		User findUser = userRepository.findById(login.getId());
@@ -89,8 +96,5 @@ public class UserServiceImpl implements UserService{
 		return false;
 	}
 
-
-
-	
 
 }

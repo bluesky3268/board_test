@@ -2,6 +2,7 @@ package com.example.demo.dto.responseDto.board;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.entity.UploadFile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +18,10 @@ public class BoardResponse {
 	private Long count;
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
-	private String fileName;
-	
-	public BoardResponse(Long no, String writer, String title, String content, Long count, LocalDateTime createdDate,
-			LocalDateTime modifiedDate, String fileName) {
+	private UploadFile img;
+	private UploadFile file;
+
+	public BoardResponse(Long no, String writer, String title, String content, Long count, LocalDateTime createdDate, LocalDateTime modifiedDate) {
 		this.no = no;
 		this.writer = writer;
 		this.title = title;
@@ -28,10 +29,5 @@ public class BoardResponse {
 		this.count = count;
 		this.createdDate = createdDate;
 		this.modifiedDate = modifiedDate;
-		this.fileName = fileName;
 	}
-	
-	
-	
-	
 }

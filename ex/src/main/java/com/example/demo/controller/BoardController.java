@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import com.example.demo.dto.responseDto.user.UserResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +20,18 @@ import com.github.pagehelper.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.servlet.http.HttpSession;
+
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
 
 	private final BoardService boardService;
-	
+
 	@GetMapping("/")
-	public String boardList(@RequestParam(defaultValue="1") int page, Model model) {
+	@ResponseBody
+	public BoardListResponse boardList(@RequestParam(defaultValue="1") int page, Model model) {
 		
 		BoardListResponse response = new BoardListResponse();
 		
@@ -36,13 +40,21 @@ public class BoardController {
 		PageInfo<List> pageInfo = new PageInfo(list);
 		response.setPageInfo(pageInfo);
 		
-		
 		model.addAttribute("response", response.getPageInfo().getList());
 		model.addAttribute("paging", response.getPageInfo());
 		
-		return "index";
+		return response;
 	}
-	
+
+	@GetMapping("/board")
+	public String boardAdd(HttpSession session) {
+		UserResponse loginUser = (UserResponse) session.getAttribute("user");
+		if (loginUser == null) {
+			return "redirect:/";
+		}
+		return "board/boardAdd";
+	}
+
 	@ResponseBody
 	@GetMapping("/board/{bno}")
 	public BoardResponse boardDetail(@PathVariable Long bno, Model model) {

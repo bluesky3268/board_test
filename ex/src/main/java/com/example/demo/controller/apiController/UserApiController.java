@@ -48,8 +48,8 @@ public class UserApiController {
 		if(userJoin != null) { 
 			result = userService.join(userJoin);
 			model.addAttribute("result", result);
-		} 
-	 return result;
+		}
+		return result;
 	}
 
 	@GetMapping("/logout")

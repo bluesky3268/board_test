@@ -43,9 +43,10 @@ public class UserController {
 	public String login(Login login, HttpSession session) {
 		log.info("login id : {}", login.getId());
 		int result = userService.login(login);
+		UserResponse loginUser = userService.findById(login.getId());
 		// 성공 : 1, 실패 : 0
 		if(result == 1) {
-			session.setAttribute("id", login.getId());
+			session.setAttribute("user", loginUser);
 			log.info("로그인 성공");
 			return "index";
 		}
