@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.demo.repository.BoardRepository">
 
-	<resultMap id="1" type="com.example.demo.entity.Board" >
+	<resultMap id="board" type="com.example.demo.entity.Board" >
 		<id column="bno" property="no"/>
 		<result column="uno" property="uno"/>
 		<result column="writer" property="writer"/>
@@ -19,12 +19,16 @@
 		<result column="img_name" property="imgName"/>
 	</resultMap>
 
-	<select id="findByNo" parameterType="java.lang.Long" resultMap="1">
+	<select id="findByNo" parameterType="java.lang.Long" resultMap="board">
 		select * from board where bno=#{no}
 	</select>
 
-	<select id="findAll" resultMap="1">
-		select * from board
+	<select id="findAll" resultMap="board">
+		select * from board order by cdate desc
+	</select>
+
+	<select id="findAllWithPage" resultMap="board" parameterType="com.example.demo.util.Criteria">
+		select * from board order by bno desc, cdate desc limit #{limit}, #{size}
 	</select>
 
 	<insert id="insert" parameterType="com.example.demo.entity.Board">

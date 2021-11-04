@@ -3,10 +3,9 @@ package com.example.demo.repository;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.example.demo.entity.Board;
-import com.github.pagehelper.Page;
+import com.example.demo.util.Criteria;
 
 @Mapper
 public interface BoardRepository {
@@ -16,6 +15,8 @@ public interface BoardRepository {
 	Board findByNo(Long no);
 	
 	List<Board> findAll();
+	
+	List<Board> findAllWithPage(Criteria criteria);
 
 	void increaseCount(Long bno);
 

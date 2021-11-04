@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <title>비밀번호 입력</title>
+</head>
+<body>
+<header>비밀번호 입력</header>
+<form method='post' action='/checkPwd'>
+  <div class="password">
+      <article for="title">비밀번호</article>
+      <input type="password" id="pwd" name="pwd">
+    </div>
+</form >
+  <div>
+    <button type="submit" class="join_btn" id="btn-add">확인</button>
+    <button type="button" class="go_back"><a href="javascript:history.back(-1)">취소</a></button>
+  </div>
+
+</body>
+</html>

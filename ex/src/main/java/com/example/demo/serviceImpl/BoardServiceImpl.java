@@ -1,27 +1,31 @@
 package com.example.demo.serviceImpl;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.entity.UploadFile;
-import com.example.demo.service.FileService;
-import com.example.demo.util.FileHandler;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.requestDto.BoardAdd;
+import com.example.demo.dto.responseDto.board.BoardListResponse;
 import com.example.demo.dto.responseDto.board.BoardResponse;
 import com.example.demo.entity.Board;
+import com.example.demo.entity.UploadFile;
 import com.example.demo.entity.User;
 import com.example.demo.repository.BoardRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.BoardService;
-import com.github.pagehelper.PageHelper;
+import com.example.demo.service.FileService;
+import com.example.demo.util.Criteria;
+import com.example.demo.util.FileHandler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -55,6 +59,9 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int insert(BoardAdd boardAdd, MultipartFile img, MultipartFile multipartFile) {
 
+		log.info("img : {}", img.getOriginalFilename());
+		log.info("file : {}", multipartFile.getOriginalFilename());
+		
 		try {
 			UploadFile imgFile = new UploadFile();
 			UploadFile file = new UploadFile();
@@ -122,19 +129,23 @@ public class BoardServiceImpl implements BoardService{
 	}
 	
 	@Override
-	public List<BoardResponse> boardPaging(int page) {
-		PageHelper.startPage(page, SIZE);
+	public BoardListResponse boardPaging(Criteria criteria) {
 		
-		List<BoardResponse> list = new ArrayList<>();
+		int totalCount = boardRepository.countBoard();
+	
+
+		List<Board> result = boardRepository.findAllWithPage(criteria);
+		BoardListResponse response = new BoardListResponse();
 		
-		List<Board> result = boardRepository.findAll();
 		for(Board board : result) {
 			BoardResponse dto = board.toDto();
-
-			list.add(dto);
+			response.getList().add(dto);
 		}
 		
-		return list;
+		
+		response.setCriteria(criteria);
+		
+		return response;
 	}
 
 	@Override
@@ -148,5 +159,13 @@ public class BoardServiceImpl implements BoardService{
 		return boardRepository.countBoard();
 	}
 
+	@Override
+	public Resource downloadImg(String imgName) throws MalformedURLException {
+		UrlResource urlResource = new UrlResource("file:" + fileHandler.getFullPath(imgName));
+		return urlResource;
+	}
 
+
+	
+	
 }

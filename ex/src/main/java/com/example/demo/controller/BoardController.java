@@ -1,62 +1,57 @@
 package com.example.demo.controller;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
 
-import com.example.demo.dto.responseDto.user.UserResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dto.responseDto.board.BoardListResponse;
 import com.example.demo.dto.responseDto.board.BoardResponse;
-import com.example.demo.repository.BoardRepository;
+import com.example.demo.dto.responseDto.user.UserResponse;
 import com.example.demo.service.BoardService;
-import com.example.demo.util.Pager;
-import com.github.pagehelper.PageInfo;
+import com.example.demo.util.Criteria;
+
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.HttpSession;
-
 @Slf4j
 @Controller
+@RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
 
 	private final BoardService boardService;
+	
 
-	@GetMapping("/")
+	@GetMapping("")
 	@ResponseBody
-	public BoardListResponse boardList(@RequestParam(defaultValue="1") int page, Model model) {
-		
-		BoardListResponse response = new BoardListResponse();
-		
-		List<BoardResponse> list = boardService.boardPaging(page);
-
-		PageInfo<List> pageInfo = new PageInfo(list);
-		response.setPageInfo(pageInfo);
-		
-		model.addAttribute("response", response.getPageInfo().getList());
-		model.addAttribute("paging", response.getPageInfo());
+	public BoardListResponse boardList(@RequestParam(defaultValue="1") int page, Model model, Criteria criteria) {
+		log.info("page param : {}", page);		
+		criteria.setStartPage(page);
+		criteria.setLimit(page);
+		int startPage = criteria.getStartPage();
+		criteria.setEndPage(startPage);
+		BoardListResponse response = boardService.boardPaging(criteria);
 		
 		return response;
 	}
 
-	@GetMapping("/board")
+	@GetMapping("/addForm")
 	public String boardAdd(HttpSession session) {
 		UserResponse loginUser = (UserResponse) session.getAttribute("user");
 		if (loginUser == null) {
-			return "redirect:/";
+			return "redirect:/loginForm";
 		}
 		return "board/boardAdd";
 	}
 
-	@ResponseBody
-	@GetMapping("/board/{bno}")
+	@GetMapping("/{bno}")
 	public BoardResponse boardDetail(@PathVariable Long bno, Model model) {
 		BoardResponse response = boardService.findByNo(bno);
 		log.info("response.getTitle() : {}", response.getTitle());

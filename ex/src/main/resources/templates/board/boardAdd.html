@@ -10,17 +10,16 @@
 <header>게시글 등록</header>
 <section>
   <form enctype="multipart/form-data" id="form">
-    <div class="container">
       <div class="boardAdd">
         <article for="writer">작성자</article>
-        <div id="writer" th:value="${session.user.id}" th:text="${session.user.id}" readonly style="color: dimgray"></div>
+        <div id="id" th:text="${session.user.id}" readonly style="color: dimgray"></div >
         <input type="hidden" th:value="${session.user.no}" id="userNo"/>
-        </div>
+        <input type="hidden" th:value="${session.user.id}" id="writer"/>
       </div>
       <div class="add_input">
-      <article for="title">비밀번호</article>
-      <input type="text" id="pwd" name = "pwd">
-    </div>
+	      <article for="title">비밀번호</article>
+	      <input type="text" id="pwd" name = "pwd">
+      </div>
       <div class="add_input">
         <article for="title">제목</article>
         <input type="text" id="title" name = "title">
@@ -54,11 +53,11 @@
       var userNo = $('#userNo').val();
 
       var data = {
-        title: title,
-        content: content,
-        pwd: pwd,
-        userNo: userNo,
-        writer : writer
+        writer:writer,
+        title:title,
+        content:content,
+        pwd:pwd,
+        userNo:userNo
       };
 
       if (title == null || title == undefined || title == "") {

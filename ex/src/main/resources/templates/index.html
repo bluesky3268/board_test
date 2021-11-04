@@ -25,8 +25,17 @@
 <body>
 <div style="margin-top:10px">
     <button type="button" class="btn btn-outline-primary"><a href="javascript:history.back(-1)">뒤로</a></button>
-    <button type="button" class="btn btn-outline-primary"><a th:href="@{/loginForm}">로그인</a></button>
-    <a th:href="@{/joinForm}" class="btn btn-primary">회원가입</a>
+    <div>
+	    <th:block th:if="${#strings.isEmpty(session.user)}">
+	    <button type="button" class="btn btn-outline-primary"><a th:href="@{/loginForm}">로그인</a></button>
+        <a th:href="@{/joinForm}" class="btn btn-primary">회원가입</a>
+    </div>
+    
+    <div class="logout" style="position: absolute; margin: 0 auto; left: 70%">
+    <th:block th:unless="${#strings.isEmpty(session.user)}">
+        <button type="button" id="btn_logout" class="btn btn-secondary"><th:block th:text="${session.user.id} + '님 로그아웃'"></th:block></button >
+    </th:block>
+    </div>
 </div>
 <br/>
 
@@ -42,67 +51,55 @@
         </tr>
     </thead>
     <tbody class="tbody" th:each="board : ${response}">
-        <td th:text="${board.no}">번호</td>
+        <td th:text="${board.no}" th:href="@{/board/{no}(no=${board.no})}">번호</td>
         <td th:text="${board.title}" id="title">제목</td>
         <td th:text="${board.writer}" id="writer">작성자</td>
         <td th:text="${board.count}" id="count">조회수</td>
         <td th:text="${board.createdDate}" id="createdDate">작성일자</td>
     </tbody>
 </table>
-<button type="button" class="btn btn-outline-primary"><a th:href="@{/board}">게시글 작성</a></button>
+<button type="button" class="btn btn-outline-primary"><a th:href="@{/board/addForm}">게시글 작성</a></button>
 
-<!--<nav>-->
-<!--    <ul>-->
-<!--        &lt;!&ndash; 이전 페이지 &ndash;&gt;-->
-<!--        <li th:classappend="${board.getPrePage() == 0} ? 'disabled'">-->
-<!--            &lt;!&ndash; href: /page?pageNum=이전페이지&keyword=검색분류&search=검색어 &ndash;&gt;-->
-<!--            <a th:href="@{/page(pageNum=${users.getPrePage()}, keyword=${search.getKeyword()}, search=${search.getSearch()})}">Previous</a>-->
-<!--        </li>-->
-<!--        &lt;!&ndash; getNavigateFirstPage() : 페이징의 처음 숫자 getNavigateLastPage : 페이징의 마지막 숫자를 이용해 페이징 숫자 출력 &ndash;&gt;-->
-<!--        &lt;!&ndash; href : /page?pageNum=선택한 페이지&keyword=검색분류&search=검색어 &ndash;&gt;-->
-<!--        <li th:each="page: ${#numbers.sequence(users.getNavigateFirstPage(), users.getNavigateLastPage())}" th:classappend="${page == users.getPageNum()} ? 'active'">-->
-<!--            <a th:text="${page}" th:href="@{/page(pageNum=${page})}"></a>-->
-<!--        </li>-->
-<!--        &lt;!&ndash; getPrePage : 다음 페이지 &ndash;&gt;-->
-<!--        <li th:classappend="${users.getNextPage() == 0} ? 'disabled'">-->
-<!--            &lt;!&ndash; href: /page?pageNum=다음페이지&keyword=검색분류&search=검색어 &ndash;&gt;-->
-<!--            <a th:href="@{/page(pageNum=${users.getNextPage()}, keyword=${search.getKeyword()}, search=${search.getSearch()})}">Next</a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--</nav>-->
+<nav aria-label="pagination">
+    <ul class="pagination justify-content-center">
+        <li th:classappend="${paging.pageNum}-1 == 0 ? 'disabled'" class="page-item">
+           <a th:href="@{/board(page=${paging.pageNum}-1)}">이전</a>
+        </li >
+        <li class="page-item" th:each="page: ${#numbers.sequence(paging.navigateFirstPage, paging.navigateLastPage+1)}" th:classappend="${page == paging.pageNum + 1} ? 'active'">
+            <a th:text="${page}" th:href="@{/board(page=${page})}"></a>
+        </li>
+        <li th:classappend="${paging.isIsLastPage} ? 'disabled'" class="page-item">
+            <a th:href="@{/board(page=${paging.pageNum} + 1)}">다음</a>
+       </li >
+    </ul >
+</nav >
 <script type="text/javascript">
+    
+  $(function () {
+      $('#btn_logout').click(function () {
 
-    let delete_member = {
-        delete: function (memberNo) {
             $.ajax({
-                type: "DELETE",
-                url: `/api/member/` + memberNo,
-                dataType: "json"
-            }).done(function (response) {
-                alert('성공적으로 삭제되었습니다.');
-                window.location.href = '/admin/members';
-            }).fail(function (error) {
-                alert(JSON.stringify(error));
-            });
-        }
-    }
+            async:true,
+            type:'GET',
+            url:'/api/logout',
+            contentType:'application/json; charset=utf-8;',
+            success: function (result) {
+				console.log('result : ' + result);
+                if (result == 1) {
+                    alert("로그아웃 성공");
+                    window.location.href='/board';
+                }else{
+                    alert("로그아웃 실패. 다시 시도해주세요.");
+                }
+            },
+            error:function(){
 
-    $(function (){
-       $('#btn_search_role').click(function (){
-           var role = $('#role').val();
+            }
+        });
 
-           $.ajax({
-               type:'GET',
-               url: '/api/member/role/' + role,
-               dataType:'json',
-               contentType:'application/json; charset=UTF-8',
-               success:  function () {
-                   window.location.href = '/admin/members/' + role;
-               }
+        });
+    });    
 
-           });
-       });
-    });
 </script>
 </body>
 </html>

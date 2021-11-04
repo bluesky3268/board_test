@@ -28,6 +28,21 @@ public class UserServiceImpl implements UserService{
 	private final PasswordEncoder passwordEncoder;
 	
 	@Override
+	public boolean idDuplicateCheck(String id) {
+		log.info("-> service param id : {}", id);
+		try {
+			User findUser = userRepository.findById(id);
+			log.info("-> service findUser.getId() : {}", findUser.getId());
+		}catch(NullPointerException e) {
+			log.info("NullPointerException 발생");
+			// null값이면 아이디 사용가능
+			return true;
+		}
+		return false;
+	}
+
+	
+	@Override
 	public int join(UserJoin userJoin) {
 	
 		String encodedPwd = passwordEncoder.encode(userJoin.getPwd());
@@ -38,6 +53,17 @@ public class UserServiceImpl implements UserService{
 				.build();
 		return userRepository.insert(user);
 
+	}
+	
+	@Override
+	public int login(Login login) throws NullPointerException{
+		log.info("login.getId() : {}", login.getId());
+			User findUser = userRepository.findById(login.getId());
+			log.info("findUser : {}, {}", findUser.getNo(), findUser.getId());
+			if(passwordEncoder.matches(login.getPassword(), findUser.getPwd())) {
+				return 1;
+			}
+		return 0;
 	}
 
 	@Override
@@ -65,35 +91,12 @@ public class UserServiceImpl implements UserService{
 		return response;
 	}
 
-	@Override
-	public int login(Login login) {
-		log.info("login.getId() : {}", login.getId());
-		User findUser = userRepository.findById(login.getId());
-		log.info("findUser : {}, {}", findUser.getNo(), findUser.getId());
-		if(passwordEncoder.matches(login.getPassword(), findUser.getPwd())) {
-			return 1;
-		}
-		return 0;
-	}
+
 
 	@Override
 	public int delete(Long no) {
 		int result = userRepository.delete(no);
 		return result;
-	}
-
-	@Override
-	public boolean idDuplicateCheck(String id) {
-		log.info("-> service param id : {}", id);
-		try {
-			User findUser = userRepository.findById(id);
-			log.info("-> service findUser.getId() : {}", findUser.getId());
-		}catch(NullPointerException e) {
-			log.info("NullPointerException 발생");
-			// null값이면 아이디 사용가능
-			return true;
-		}
-		return false;
 	}
 
 

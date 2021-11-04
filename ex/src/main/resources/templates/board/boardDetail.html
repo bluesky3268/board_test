@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery-3.6.0.min.js"></script>
+    <title>게시글</title>
+</head>
+<body>
+<header>게시글</header>
+<section>
+
+	<div class="title">
+	    <article for="title">제목</article>
+	    <div id="writer" th:value="${detail.title}" th:text="${detail.title}">제목</div>
+ 	</div>
+	<div class="count">
+	    <article for="count">조회수</article>
+	    <div id="count" th:value="${detail.count}" th:text="${detail.count}">0</div>
+ 	</div>
+	<div class="createdDate">
+	    <article for="createdDate">작성일자</article>
+	    <div id="createdDate" th:value="${detail.createdDate}" th:text="${detail.createdDate}">작성일자</div>
+ 	</div>
+	<div class="modifiedDate">
+	    <article for="modifiedDate">최근수정일자</article>
+	    <div id="modifiedDate" th:value="${detail.modifiedDate}" th:text="${detail.modifiedDate}">최근수정일자</div>
+ 	</div>
+  	<div class="writer">
+	    <article for="writer">작성자</article>
+	    <div id="writer" th:value="${detail.writer}" th:text="${detail.writer}">작성자</div>
+	    <input type="hidden" th:value="${session.user.no}" id="userNo"/>
+    </div>
+	 <div class="content">
+	    <article for="content">내용</article>
+	    <textarea readonly 
+	    	th:text=${detail.content}
+	    	th:src="|/api/img/${detail.img.savedName}|" width="100" height="50"></textarea>
+	  </div>
+	  <div class="file">
+	    <article for="file">첨부파일</article>
+	     <a th:if="${detail.file}" th:href="|/upload/file/${detail.file.no}|" th:text="${detail.file.originalName}" /><br/>
+	  </div>
+
+    <button type="button" class="btn_edit" id="btn_edit">수정</button>
+    <button type="button" class="btn_delete" id="btn_delete">삭제</button>
+    <button type="button" class="go_back"><a href="/">목록</a></button>
+</section>
+<script type="text/javascript">
+  $(function() {
+
+    $('#btn-add').click(function () {
+      var writer = $('#writer').val();
+      var title = $('#title').val();
+      var content = $('#content').val();
+      var pwd = $('#pwd').val();
+      var userNo = $('#userNo').val();
+
+      var data = {
+        title:title,
+        content:content,
+        pwd:pwd,
+        userNo:userNo,
+        writer:writer
+      };
+
+      if (title == null || title == undefined || title == "") {
+        alert('제목을 입력해주세요');
+        $('#title').focus();
+        return false;
+      }
+
+
+      var form = $('#form')[0];
+      var formData = new FormData(form);
+
+      formData.append('img', $('#img'));
+      formData.append('file', $('#file'));
+      formData.append('data', new Blob([JSON.stringify(data)], {type: "application/json"}));
+
+      $.ajax({
+
+        type: 'POST',
+        url: '/api/v2/add',
+        processData: false,
+        contentType: false,
+        data: formData,
+
+        success: function (data) {
+          alert("성공적으로 등록되었습니다.");
+          if (data == 1) {
+            window.location.href = '/';
+          } else if (data == 0) {
+            window.location.href = '/board';
+          }
+        },
+        error: function (error) {
+          alert('게시글 등록에 실패하였습니다. 다시 시도해주세요.');
+        }
+      });
+
+    });
+  });
+</script>
+</body>
+</html>

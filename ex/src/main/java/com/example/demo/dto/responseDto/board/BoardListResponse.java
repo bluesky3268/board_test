@@ -3,7 +3,7 @@ package com.example.demo.dto.responseDto.board;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.pagehelper.PageInfo;
+import com.example.demo.util.Criteria;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,5 +12,6 @@ import lombok.Setter;
 @Setter
 public class BoardListResponse {
 
-	PageInfo<?> pageInfo;
+	private Criteria criteria;
+	private List<BoardResponse> list = new ArrayList<>();
 }

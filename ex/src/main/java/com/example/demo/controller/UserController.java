@@ -28,6 +28,11 @@ public class UserController {
 
 	private final UserService userService;
 	
+	@GetMapping("/")
+	public String main() {
+		return "redirect:/board";
+	}
+	
 	@GetMapping("/joinForm")
 	public String joinForm() {
 		return "user/joinForm";
@@ -36,23 +41,6 @@ public class UserController {
 	@GetMapping("/loginForm")
 	public String loginForm() {
 	 return "/user/loginForm";
-	}
-	
-
-	@PostMapping("/login")
-	public String login(Login login, HttpSession session) {
-		log.info("login id : {}", login.getId());
-		int result = userService.login(login);
-		UserResponse loginUser = userService.findById(login.getId());
-		// 성공 : 1, 실패 : 0
-		if(result == 1) {
-			session.setAttribute("user", loginUser);
-			log.info("로그인 성공");
-			return "index";
-		}
-		log.info("로그인 실패");
-
-		return "redirect:/loginForm";
 	}
 	
 	@ResponseBody

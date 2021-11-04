@@ -27,7 +27,7 @@
             <div id="checkPwd"></div>
             <br/>           
             <button type="button" class="btn btn-primary" id="btn_join">회원가입</button>
-            <button type="button" class="go_back"><a href="javascript:history.back(-1)">뒤로</a></button>
+            <button type="button" class="btn btn_secondary"><a href="/">메인</a></button>
     </form>
 </section>
 
@@ -36,9 +36,8 @@
 	$(function () {
       $('#duplicate_check').click(function () {
 
-            var id = $("#id").val();
-        	var sendData = {"id":id}
-
+            var id = $('#id').val();
+            var sendData = {"id":id};
             $.ajax({
             async:true,
             type:'POST',
@@ -46,9 +45,9 @@
             data: JSON.stringify(sendData),
             dataType:'json',
             contentType:'application/json; charset=utf-8;',
-            success: function (data) {
-				console.log(data);
-                if (data == 0) {
+            success: function (result) {
+				console.log(result);
+                if (result == 0) {
                     console.log("이미 사용 중인 이름입니다.");
                     $('#duplicate_check').attr('check', 'N');
                     alert("이미 사용 중인 이름입니다.");
@@ -124,7 +123,7 @@
                 data: formData,
                 success: function () {
                     alert("성공적으로 등록되었습니다.");
-                    window.location.href = '/';
+                    window.location.href = '/loginForm';
                 },
                 error: function (error) {
                     alert(JSON.stringify(error));
