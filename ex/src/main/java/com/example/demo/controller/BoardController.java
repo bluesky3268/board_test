@@ -30,16 +30,20 @@ public class BoardController {
 	
 
 	@GetMapping("")
-	@ResponseBody
-	public BoardListResponse boardList(@RequestParam(defaultValue="1") int page, Model model, Criteria criteria) {
-		log.info("page param : {}", page);		
+	public String boardList(@RequestParam(defaultValue="1") int page, Model model, Criteria criteria) {
+		log.info("page param : {}", page);	
+		
 		criteria.setStartPage(page);
 		criteria.setLimit(page);
 		int startPage = criteria.getStartPage();
 		criteria.setEndPage(startPage);
-		BoardListResponse response = boardService.boardPaging(criteria);
 		
-		return response;
+		BoardListResponse response = boardService.boardPaging(criteria);
+		model.addAttribute("response", response.getList());
+		model.addAttribute("criteria", response.getCriteria());
+		
+		
+		return "index";
 	}
 
 	@GetMapping("/addForm")

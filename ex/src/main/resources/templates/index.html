@@ -62,14 +62,15 @@
 
 <nav aria-label="pagination">
     <ul class="pagination justify-content-center">
-        <li th:classappend="${paging.pageNum}-1 == 0 ? 'disabled'" class="page-item">
-           <a th:href="@{/board(page=${paging.pageNum}-1)}">이전</a>
+    <!--    <li th:classappend="${criteria.pageNum}-1 == 0 ? 'disabled'" class="page-item">-->
+    	<li class="page-item disabled" >
+           <a th:href="@{/board(page=${criteria.pageNum}-1)}">이전</a>
         </li >
-        <li class="page-item" th:each="page: ${#numbers.sequence(paging.navigateFirstPage, paging.navigateLastPage+1)}" th:classappend="${page == paging.pageNum + 1} ? 'active'">
+        <li class="page-item" th:each="page: ${#numbers.sequence(criteria.startPage, criteria.endPage)}" th:classappend="${page == criteria.pageNum + 1} ? 'active'">
             <a th:text="${page}" th:href="@{/board(page=${page})}"></a>
         </li>
-        <li th:classappend="${paging.isIsLastPage} ? 'disabled'" class="page-item">
-            <a th:href="@{/board(page=${paging.pageNum} + 1)}">다음</a>
+        <li th:classappend="${criteria.endPage} == ${criteria.totalPage} ? 'disabled'" class="page-item">
+            <a th:href="@{/board(page=${criteria.pageNum} + 1)}">다음</a>
        </li >
     </ul >
 </nav >

@@ -10,6 +10,7 @@ public class Criteria {
 	private int limit;
 	private int endPage;
 	private int size;
+	private int totalPage;
 	
 	public Criteria() {
 		this(1, 10);
@@ -32,4 +33,11 @@ public class Criteria {
 		this.limit = (page - 1) * 10;
 	}
 	
+	public void setTotalPage(int totalCount) {
+		int tpage = totalCount / size;
+		if(totalCount % size > 0) {
+			tpage++;
+		}
+		this.totalPage = tpage;
+	}
 }
